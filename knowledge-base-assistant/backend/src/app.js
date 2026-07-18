@@ -35,7 +35,14 @@ const apiLimiter = rateLimit({
   message: { success: false, message: 'Too many requests, please try again later.' },
 });
 app.use('/api', apiLimiter);
-
+// Health Check Route
+app.get("/", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "AI Knowledge Base Assistant API is running 🚀",
+    version: "1.0.0",
+  });
+});
 // --- Routes ---
 app.use('/api', apiRoutes);
 
