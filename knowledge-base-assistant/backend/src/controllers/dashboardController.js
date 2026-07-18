@@ -3,8 +3,7 @@ import Conversation from '../models/Conversation.js';
 import ApiResponse from '../utils/ApiResponse.js';
 import asyncHandler from '../utils/asyncHandler.js';
 
-// @route  GET /api/dashboard
-// @access Private
+
 export const getDashboardStats = asyncHandler(async (req, res) => {
   const ownerFilter = { owner: req.user._id };
   const userFilter = { user: req.user._id };

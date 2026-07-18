@@ -1,12 +1,7 @@
 import fs from 'fs/promises';
 import pdfParse from 'pdf-parse';
 
-/**
- * Extracts plain text from a stored file based on its detected type.
- * Returns { text, status, error } so the caller can persist extraction
- * status on the Document even when extraction fails (graceful degradation —
- * the document still exists, it just can't be used for Q&A yet).
- */
+
 export const extractText = async (filePath, fileType) => {
   try {
     let text = '';
@@ -41,11 +36,7 @@ export const extractText = async (filePath, fileType) => {
   }
 };
 
-/**
- * Gemini's context window is large but not infinite, and stuffing an
- * entire huge document in raises cost/latency. We cap the context sent
- * per question — good enough for typical assessment-scale documents.
- */
+
 export const truncateForContext = (text, maxChars = 20000) => {
   if (text.length <= maxChars) return text;
   return `${text.slice(0, maxChars)}\n\n[...document truncated for length...]`;

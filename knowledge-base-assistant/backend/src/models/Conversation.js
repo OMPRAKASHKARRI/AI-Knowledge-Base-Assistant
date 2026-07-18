@@ -23,8 +23,7 @@ const conversationSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    // Captured for transparency/debugging — helps explain why an answer
-    // may be wrong (e.g. AI failure fallback vs a real generated answer)
+    
     status: {
       type: String,
       enum: ['success', 'failed'],

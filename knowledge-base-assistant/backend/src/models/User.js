@@ -22,13 +22,12 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Password is required'],
       minlength: [6, 'Password must be at least 6 characters'],
-      select: false, // never return password by default on queries
+      select: false, 
     },
   },
   { timestamps: true }
 );
 
-// Hash the password before saving, only if it was modified
 userSchema.pre('save', async function hashPassword(next) {
   if (!this.isModified('password')) return next();
 
@@ -41,7 +40,6 @@ userSchema.pre('save', async function hashPassword(next) {
   }
 });
 
-// Instance method to compare a plaintext password against the stored hash
 userSchema.methods.comparePassword = async function comparePassword(candidatePassword) {
   return bcrypt.compare(candidatePassword, this.password);
 };

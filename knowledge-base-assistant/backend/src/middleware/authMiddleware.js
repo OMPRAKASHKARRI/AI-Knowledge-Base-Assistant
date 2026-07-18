@@ -3,11 +3,7 @@ import ApiError from '../utils/ApiError.js';
 import asyncHandler from '../utils/asyncHandler.js';
 import User from '../models/User.js';
 
-/**
- * Verifies the JWT from the Authorization header and attaches the
- * authenticated user to req.user. Throws 401 for missing/invalid/expired
- * tokens, and 401 if the user was deleted after the token was issued.
- */
+
 const protect = asyncHandler(async (req, res, next) => {
   const authHeader = req.headers.authorization;
 

@@ -32,12 +32,12 @@ const documentSchema = new mongoose.Schema(
     },
     storagePath: {
       type: String,
-      required: true, // path on disk (or URL, if swapped for cloud storage later)
+      required: true, 
     },
     extractedText: {
       type: String,
       default: '',
-      select: false, // large field — only pull it in explicitly when needed (e.g. for AI context)
+      select: false, 
     },
     extractionStatus: {
       type: String,
@@ -52,7 +52,6 @@ const documentSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Speeds up "search documents by name" queries
 documentSchema.index({ owner: 1, name: 'text' });
 
 const Document = mongoose.model('Document', documentSchema);

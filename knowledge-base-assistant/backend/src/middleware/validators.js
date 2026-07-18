@@ -1,10 +1,7 @@
 import { body, query, validationResult } from 'express-validator';
 import ApiError from '../utils/ApiError.js';
 
-/**
- * Runs after any validation chain below. Collects express-validator's
- * errors and turns them into a single ApiError with details attached.
- */
+
 export const handleValidationErrors = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {

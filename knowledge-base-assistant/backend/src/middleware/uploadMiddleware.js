@@ -5,7 +5,6 @@ import ApiError from '../utils/ApiError.js';
 
 const UPLOAD_DIR = path.resolve('src/uploads');
 
-// Ensure the uploads directory exists at startup
 if (!fs.existsSync(UPLOAD_DIR)) {
   fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 }
@@ -14,7 +13,6 @@ const ALLOWED_MIME_TYPES = {
   'application/pdf': 'pdf',
   'text/plain': 'txt',
   'text/markdown': 'md',
-  // Some OS/browsers send .md as this generic type — we fall back to extension check below
   'application/octet-stream': 'md',
 };
 

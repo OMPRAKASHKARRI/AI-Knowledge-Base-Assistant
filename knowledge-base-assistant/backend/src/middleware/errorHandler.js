@@ -1,10 +1,6 @@
 import ApiError from '../utils/ApiError.js';
 
-/**
- * Converts any thrown error (ApiError, Mongoose error, Multer error,
- * JSON parse error, or unexpected bug) into a consistent JSON response.
- * This must be registered LAST in server.js, after all routes.
- */
+
 const errorHandler = (err, req, res, next) => {
   let error = err;
 

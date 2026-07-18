@@ -9,8 +9,7 @@ const generateToken = (userId) =>
     expiresIn: process.env.JWT_EXPIRES_IN || '7d',
   });
 
-// @route  POST /api/auth/signup
-// @access Public
+
 export const signup = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -30,8 +29,7 @@ export const signup = asyncHandler(async (req, res) => {
   );
 });
 
-// @route  POST /api/auth/login
-// @access Public
+
 export const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
@@ -51,8 +49,6 @@ export const login = asyncHandler(async (req, res) => {
     })
   );
 });
-
-// @route  GET /api/auth/me
 // @access Private
 export const getMe = asyncHandler(async (req, res) => {
   res.status(200).json(new ApiResponse(200, 'Current user fetched', { user: req.user }));

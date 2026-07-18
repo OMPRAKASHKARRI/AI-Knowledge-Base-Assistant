@@ -12,8 +12,7 @@ import {
 
 const router = express.Router();
 
-router.use(protect); // every document route requires authentication
-
+router.use(protect); 
 router.post('/', upload.single('file'), uploadDocument);
 router.get('/', paginationValidation, getDocuments);
 router.get('/:id', getDocumentById);

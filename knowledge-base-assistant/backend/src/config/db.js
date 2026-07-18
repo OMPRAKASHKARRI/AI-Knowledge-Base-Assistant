@@ -1,9 +1,5 @@
 import mongoose from 'mongoose';
 
-/**
- * Connects to MongoDB using the URI from environment variables.
- * Exits the process on failure since the app cannot function without a DB.
- */
 const connectDB = async () => {
   try {
     const uri = process.env.MONGODB_URI;

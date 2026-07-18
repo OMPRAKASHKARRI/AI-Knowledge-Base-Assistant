@@ -1,20 +1,7 @@
 import { getGroqClient, getGroqModel, PREFERRED_MODELS } from '../config/groq.js';
 import { truncateForContext } from './textExtractionService.js';
 
-/**
- * Answers a question using the document's extracted text as grounding context.
- *
- * Uses the OpenAI-compatible Groq SDK, which accepts a standard
- * `chat.completions.create()` call — so swapping models is just an env var.
- *
- * Automatic model fallback:
- *   If the primary model returns a 404 (model not found / deprecated),
- *   we retry once with each fallback in PREFERRED_MODELS before giving up.
- *   This means the app keeps working even if Groq rotates model IDs.
- *
- * Throws on failure — the controller (chatController.js) catches this and
- * persists the failed attempt to conversation history before returning 502.
- */
+
 export const answerQuestionFromDocument = async (documentText, question) => {
   const client = getGroqClient();
   const context = truncateForContext(documentText);
@@ -34,8 +21,7 @@ export const answerQuestionFromDocument = async (documentText, question) => {
     },
   ];
 
-  // Try preferred model first, then fall back through the list if Groq
-  // returns a model-not-found error (status 404).
+  
   const modelsToTry = [
     getGroqModel(),
     ...PREFERRED_MODELS.filter((m) => m !== getGroqModel()),
@@ -48,7 +34,7 @@ export const answerQuestionFromDocument = async (documentText, question) => {
       const completion = await client.chat.completions.create({
         model,
         messages,
-        temperature: 0.2,      // low temperature = factual, document-grounded answers
+        temperature: 0.2,      
         max_tokens: 1024,
         stream: false,
       });
@@ -59,7 +45,6 @@ export const answerQuestionFromDocument = async (documentText, question) => {
         throw new Error('Groq returned an empty response');
       }
 
-      // Log which model actually served the request (helpful for debugging)
       if (model !== getGroqModel()) {
         console.warn(`[groqService] Primary model unavailable — used fallback: ${model}`);
       }
@@ -74,14 +59,12 @@ export const answerQuestionFromDocument = async (documentText, question) => {
       if (isModelNotFound) {
         console.warn(`[groqService] Model "${model}" not found, trying next fallback…`);
         lastError = error;
-        continue; // try the next model in the list
+        continue; 
       }
 
-      // Any other error (auth, rate limit, network) — fail fast, don't retry
       throw error;
     }
   }
 
-  // All models exhausted
   throw lastError || new Error('No available Groq models could handle the request');
 };

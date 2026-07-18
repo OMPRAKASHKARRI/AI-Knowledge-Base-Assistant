@@ -5,8 +5,7 @@ import ApiResponse from '../utils/ApiResponse.js';
 import asyncHandler from '../utils/asyncHandler.js';
 import { answerQuestionFromDocument } from '../services/groqService.js';
 
-// @route  POST /api/ask
-// @access Private
+
 export const askQuestion = asyncHandler(async (req, res) => {
   const { documentId, question } = req.body;
 
@@ -29,8 +28,7 @@ export const askQuestion = asyncHandler(async (req, res) => {
   try {
     answer = await answerQuestionFromDocument(document.extractedText, question);
   } catch (error) {
-    // Graceful degradation: log the failed attempt in history instead of
-    // just throwing, so the user can see what happened and retry.
+    
     status = 'failed';
     answer = 'Sorry, the AI service failed to generate a response. Please try again in a moment.';
 
@@ -42,8 +40,7 @@ export const askQuestion = asyncHandler(async (req, res) => {
       status,
     });
 
-    // Still respond with 502 so the frontend can show an error state,
-    // while the failed attempt is preserved in history for transparency.
+    
     console.error(`Groq API error: ${error.message}`);
     throw new ApiError(502, 'AI service is currently unavailable. Please try again shortly.', {
       conversationId: conversation._id,
@@ -61,9 +58,7 @@ export const askQuestion = asyncHandler(async (req, res) => {
   res.status(201).json(new ApiResponse(201, 'Answer generated successfully', { conversation }));
 });
 
-// @route  GET /api/history
-// @query  page, limit, search, documentId
-// @access Private
+
 export const getHistory = asyncHandler(async (req, res) => {
   const page = parseInt(req.query.page, 10) || 1;
   const limit = parseInt(req.query.limit, 10) || 10;

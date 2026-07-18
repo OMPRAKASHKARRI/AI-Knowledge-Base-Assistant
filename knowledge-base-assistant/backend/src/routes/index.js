@@ -9,7 +9,6 @@ const router = express.Router();
 router.use('/auth', authRoutes);
 router.use('/documents', documentRoutes);
 router.use('/dashboard', dashboardRoutes);
-// chatRoutes defines both /ask and /history at its own root, mounted directly on /api
 router.use('/', chatRoutes);
 
 router.get('/health', (req, res) => {
