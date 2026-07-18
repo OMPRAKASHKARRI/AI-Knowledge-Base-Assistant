@@ -1,130 +1,287 @@
-# AI-Powered Knowledge Base Assistant
+# 🤖 AI Knowledge Base Assistant
 
-A full-stack web application where users upload documents (PDF, TXT, Markdown) and ask AI-powered questions about their contents. Built for the Full Stack Developer technical assessment.
+An AI-powered Knowledge Base Assistant that enables users to upload documents and ask intelligent, context-aware questions. The application extracts document content, stores metadata securely, and uses a Large Language Model (LLM) to generate responses grounded in the uploaded documents.
 
-## Project Overview
+---
 
-Users sign up, upload documents to a personal knowledge base, and ask natural-language questions about any document. The app extracts text from each upload, sends it as grounding context to Google's Gemini API, and returns an answer sourced strictly from that document. Every question and answer is saved to a searchable chat history, and a dashboard summarizes activity at a glance.
+## 🚀 Features
 
-**Tech stack**
+### 🔐 Authentication
+- User Registration
+- User Login
+- JWT-based Authentication
+- Protected API Routes
+- Secure Password Hashing using bcrypt
 
-| Layer | Technology |
-|---|---|
-| Frontend | React 18, TypeScript, Vite, Tailwind CSS, React Router |
-| Backend | Node.js, Express.js |
-| Database | MongoDB (Mongoose) |
-| Auth | JWT + bcrypt |
-| AI | Groq (`groq-sdk`, model: `llama-3.3-70b-versatile`) |
-| File handling | Multer (upload), `pdf-parse` (extraction) |
+### 📄 Document Management
+- Upload PDF, TXT, and Markdown files
+- Automatic document text extraction
+- Store document metadata
+- Preview uploaded documents
+- Delete documents
+- Search uploaded documents
 
-## Project Structure
+### 🤖 AI Question Answering
+- Ask questions based on uploaded documents
+- AI responses grounded in document content
+- Prevents hallucinations by responding only from available context
+- Graceful fallback when information is unavailable
+
+### 💬 Chat History
+- Stores previous conversations
+- View historical questions and AI responses
+- Search chat history
+
+### 📊 Dashboard
+- Total uploaded documents
+- Total questions asked
+- Failed extraction count
+- Recent uploads
+- Recent AI conversations
+
+### ⚡ Additional Features
+- Responsive UI
+- Loading and Empty States
+- Error Handling
+- RESTful APIs
+- Clean MVC Architecture
+
+---
+
+# 🛠 Tech Stack
+
+## Frontend
+- React
+- TypeScript
+- Vite
+- Tailwind CSS
+- React Router
+- Axios
+- Lucide React
+
+## Backend
+- Node.js
+- Express.js
+- MongoDB
+- Mongoose
+- JWT Authentication
+- Multer
+- bcrypt
+
+## AI
+- Groq API
+- Llama/OpenAI Compatible Model
+
+---
+
+# 📁 Project Structure
 
 ```
-knowledge-base-assistant/
-├── backend/
-│   ├── src/
-│   │   ├── config/        # DB + Gemini client setup
-│   │   ├── models/        # User, Document, Conversation (Mongoose)
-│   │   ├── controllers/   # Route handlers
-│   │   ├── routes/        # Express routers
-│   │   ├── middleware/    # Auth, error handling, upload, validation
-│   │   ├── services/      # Text extraction, Gemini prompting
-│   │   ├── utils/         # ApiError, ApiResponse, asyncHandler
-│   │   └── uploads/       # Uploaded files on disk
-│   ├── app.js / server.js
+AI-Knowledge-Base-Assistant
+│
+├── backend
+│   ├── src
+│   │   ├── config
+│   │   ├── controllers
+│   │   ├── middleware
+│   │   ├── models
+│   │   ├── routes
+│   │   ├── services
+│   │   ├── utils
+│   │   └── app.js
+│   ├── package.json
 │   └── .env.example
-├── frontend/
-│   └── src/
-│       ├── components/    # common/, documents/, chat/, dashboard/
-│       ├── pages/         # Login, Register, Dashboard, Documents, Chat, History
-│       ├── context/       # AuthContext
-│       ├── services/      # API clients (axios)
-│       ├── types/         # Shared TypeScript interfaces
-│       └── layouts/       # AuthLayout, MainLayout
+│
+├── frontend
+│   ├── src
+│   ├── public
+│   ├── package.json
+│   └── vite.config.ts
+│
 ├── README.md
 ├── AI_USAGE.md
-├── DEBUG_NOTES.md
-└── ARCHITECTURE.md
+├── ARCHITECTURE.md
+└── DEBUG_NOTES.md
 ```
 
-## Setup & Installation
+---
 
-### Prerequisites
-- Node.js ≥ 18
-- MongoDB (local instance or a free MongoDB Atlas cluster)
-- A Groq API key (free at [console.groq.com](https://console.groq.com))
+# ⚙️ Environment Variables
 
-### 1. Clone and install
+## Backend
 
-```bash
-git clone <your-repo-url>
-cd knowledge-base-assistant
+Create a `.env` file inside the backend folder.
 
-# Backend
-cd backend
-npm install
+```env
+PORT=5000
 
-# Frontend
-cd ../frontend
-npm install
+MONGODB_URI=your_mongodb_connection_string
+
+JWT_SECRET=your_secure_jwt_secret
+
+GROQ_API_KEY=your_groq_api_key
 ```
 
-### 2. Configure environment variables
+---
 
-Copy `backend/.env.example` to `backend/.env` and fill in the values:
+# 💻 Installation
+
+## Clone Repository
+
+```bash
+git clone https://github.com/your-username/ai-knowledge-base-assistant.git
+
+cd ai-knowledge-base-assistant
+```
+
+---
+
+## Backend Setup
 
 ```bash
 cd backend
+
+npm install
+
 cp .env.example .env
+
+npm run dev
 ```
 
-| Variable | Description |
-|---|---|
-| `PORT` | Backend port (default `5000`) |
-| `NODE_ENV` | `development` or `production` |
-| `MONGODB_URI` | MongoDB connection string |
-| `JWT_SECRET` | Long random string used to sign JWTs |
-| `JWT_EXPIRES_IN` | Token lifetime, e.g. `7d` |
-| `GROQ_API_KEY` | Your Groq API key (get one free at console.groq.com) |
-| `GROQ_MODEL` | Optional — overrides default (`llama-3.3-70b-versatile`) |
-| `CLIENT_URL` | Frontend origin, for CORS (default `http://localhost:5173`) |
+---
 
-The frontend needs no `.env` for local dev — Vite proxies `/api` requests to `http://localhost:5000` (see `frontend/vite.config.ts`).
+## Frontend Setup
 
-### 3. Run locally
+Open another terminal.
 
 ```bash
-# Terminal 1 — backend
-cd backend
-npm run dev        # nodemon, http://localhost:5000
-
-# Terminal 2 — frontend
 cd frontend
-npm run dev         # http://localhost:5173
+
+npm install
+
+npm run dev
 ```
 
-Open `http://localhost:5173`, register an account, and start uploading documents.
+---
 
-### 4. Build for production
+# 🌐 Running the Application
 
-```bash
-cd frontend && npm run build     # outputs to frontend/dist
-cd backend  && npm start          # serves the API (pair with a static host or reverse proxy for the built frontend)
+Frontend
+
+```
+http://localhost:5173
 ```
 
-## Design Decisions
+Backend
 
-- **MVC + services layer on the backend.** Controllers stay thin; AI calls and text extraction live in `services/`, so swapping Gemini for OpenAI later is a one-file change, and the logic is unit-testable in isolation.
-- **RAG-lite instead of a vector database.** Documents are extracted to plain text and injected directly into the Gemini prompt (truncated to ~20k characters). At assessment scale this is simpler and just as accurate as embeddings + a vector store, and it avoids adding infrastructure (Pinecone/Chroma/etc.) that the requirements don't call for.
-- **Consistent response envelope.** Every API response is `{ success, message, data }` via `ApiResponse`, and every error funnels through one `ApiError` → global `errorHandler`. This made the frontend's error handling trivial — one `getErrorMessage()` helper covers every failure mode.
-- **Graceful degradation on extraction/AI failure.** A document with failed text extraction (e.g. a scanned/image-only PDF) still gets stored with `extractionStatus: 'failed'` rather than rejecting the upload outright — the user sees why, in place, rather than losing the file.
-- **Design language.** The frontend uses a deliberate "archive/library" visual identity (ledger-blue, stamp-amber accents, serif headings, ink-stamp file-type badges) rather than a generic dashboard template, since the product's actual subject is a personal document archive.
+```
+http://localhost:5000
+```
 
-## Future Improvements
+---
 
-- Swap plain-text-in-prompt for real embeddings + a vector store once documents/users scale past what fits in a single context window.
-- Add streaming AI responses (Gemini supports streaming; the current implementation awaits the full response).
-- Add Docker Compose (Mongo + backend + frontend) for one-command local setup.
-- Add automated tests (Jest/Supertest on the backend, React Testing Library on the frontend) — scoped out of this pass to prioritize full functional coverage first.
-- Move file storage to S3/Cloud Storage instead of local disk, for horizontal scalability.
-- Add role-based access if this ever needs shared/team knowledge bases instead of one-per-user.
+# 📡 API Endpoints
+
+## Authentication
+
+| Method | Endpoint |
+|---------|----------|
+| POST | /api/auth/register |
+| POST | /api/auth/login |
+
+---
+
+## Documents
+
+| Method | Endpoint |
+|---------|----------|
+| GET | /api/documents |
+| POST | /api/documents |
+| DELETE | /api/documents/:id |
+
+---
+
+## AI
+
+| Method | Endpoint |
+|---------|----------|
+| POST | /api/ask |
+
+---
+
+## History
+
+| Method | Endpoint |
+|---------|----------|
+| GET | /api/history |
+
+---
+
+## Dashboard
+
+| Method | Endpoint |
+|---------|----------|
+| GET | /api/dashboard |
+
+---
+
+# 🔒 Security
+
+- JWT Authentication
+- Password Hashing using bcrypt
+- Input Validation
+- Protected Routes
+- Secure Environment Variables
+- Centralized Error Handling
+
+---
+
+# 🧠 AI Workflow
+
+1. Upload a document.
+2. Extract text from the document.
+3. Store metadata and extracted content.
+4. User submits a question.
+5. Relevant document content is sent to the AI model.
+6. AI generates a context-aware response.
+7. Conversation is stored in chat history.
+
+---
+
+# 🚀 Future Improvements
+
+- Semantic Search using Vector Database
+- OCR Support
+- Role-Based Access Control
+- Redis Caching
+- Streaming AI Responses
+- Docker Support
+- Unit & Integration Tests
+- Multi-document Question Answering
+
+---
+
+# 📷 Screenshots
+
+Add application screenshots here.
+
+- Dashboard
+- Documents
+- AI Chat
+- Chat History
+
+---
+
+# 👨‍💻 Author
+
+**Om Prakash Karri**
+
+GitHub: https://github.com/OMPRAKASHKARRI
+
+LinkedIn: https://www.linkedin.com/in/omprakash-k-/
+
+---
+
+# 📄 License
+
+This project was developed as part of a Full Stack Developer Technical Assessment and is intended for educational and evaluation purposes.
